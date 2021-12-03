@@ -65,8 +65,8 @@ int main() {
    auto time1 = timesec();// End time (sec)
 
 //   day1();
-   day2();
-//   day3();
+//   day2();
+   day3();
 //   day4();
 //   day5();
 //   day6();
