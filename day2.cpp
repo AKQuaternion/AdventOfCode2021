@@ -45,6 +45,7 @@ void day2() {
 
     auto hpos=0;
     auto depth=0;
+    auto aim=0;
     string line;
     while (getline(ifile, line)) {
         string s;
@@ -53,11 +54,13 @@ void day2() {
         iline >> s >> i;
         cout << s << i << endl;
         if(s=="up")
-            depth -= i;
+            aim -= i;
         else if (s=="down")
-            depth += i;
-        else if (s == "forward")
+            aim += i;
+        else if (s == "forward") {
             hpos += i;
+            depth += aim*i;
+        }
         else throw 1;
     }
     star1 = hpos*depth;
