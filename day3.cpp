@@ -43,7 +43,7 @@ void day3() {
     transform(onesCount.begin(),onesCount.end(),back_inserter(epsilon),
               [totalCount=lines.size()](int oneCount){return oneCount > totalCount - oneCount ? '0':'1';});
 
-    star1 = binaryToInt(gamma) * binaryToInt(epsilon);
+    star1 = stoi(gamma,0,2) * stoi(epsilon,0,2);
 
     auto Olines = lines;
     auto CO2lines = lines;
@@ -58,7 +58,7 @@ void day3() {
         std::erase_if(CO2lines, [leastBit, bit](const auto &line) { return line[bit] != leastBit; });
     }
 
-    star2 = binaryToInt(Olines.front()) * binaryToInt(CO2lines.front());
+    star2 = stoi(Olines.front(),0,2) * stoi(CO2lines.front(),0,2);
     std::cout << "Day 3 star 1 = " << star1 << "\n";
     std::cout << "Day 3 star 2 = " << star2 << "\n";
 }
