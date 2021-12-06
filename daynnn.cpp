@@ -17,7 +17,6 @@
 #include <vector>
 using std::abs;
 using std::ceil;
-using std::ceil;
 using std::cout;
 using std::endl;
 using std::ifstream;
