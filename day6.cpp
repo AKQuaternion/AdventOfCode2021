@@ -21,17 +21,18 @@ void day6() {
 
     std::cout << timers.size() << std::endl;
 
-    std::vector<uint64_t> histogram(9);
+    std::vector<uint64_t> hist2(9);
     for(auto t:timers)
-        histogram[t]++;
+        hist2[t]++;
 
     for(int i=0;i<256;++i) {
         if(i==80)
-            star1 = std::accumulate(histogram.begin(),histogram.end(),uint64_t(0));
-        std::rotate(histogram.begin(),histogram.begin()+1,histogram.end());
-        histogram[6] += histogram[8];
+            star1 = std::accumulate(hist2.begin(),hist2.end(),uint64_t(0));
+        hist2[(i+7)%9] += hist2[i%9];
     }
-    star2=std::accumulate(histogram.begin(),histogram.end(),uint64_t(0));
+    star2=std::accumulate(hist2.begin(),hist2.end(),uint64_t(0));
     std::cout << "Day 6 star 1 = " << star1 << "\n";
     std::cout << "Day 6 star 2 = " << star2 << "\n";
 }
+//Day 6 star 1 = 396210
+//Day 6 star 2 = 1770823541496
