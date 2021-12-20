@@ -15,6 +15,7 @@
 #include <tuple>
 #include <utility>
 #include <vector>
+
 using std::abs;
 using std::ceil;
 using std::cout;
@@ -37,22 +38,62 @@ using std::tuple;
 using std::swap;
 using std::vector;
 
-void day17() {
-   auto star1 = 0;
-   auto star2 = 0;
-   ifstream ifile("../day17.txt");
-   string line;
-   while (getline(ifile, line)) {
-      string s;
-      int i;
-      int x;
-      int y;
-      char c;
-      double d;
-      istringstream iline(line);
-      iline >> s;
-   }
+struct Shot {
+    long x;
+    long y;
+    long dx;
+    long dy;
 
-   cout << "Day 17 star 1 = " << star1 << "\n";
-   cout << "Day 17 star 2 = " << star2 << "\n";
+    void update() {
+        x += dx;
+        y += dy;
+        if (dx) dx -= abs(dx) / dx;
+        --dy;
+    }
+};
+
+pair<bool, long> hits(Shot s, long leftx, long rightx, long boty, long topy) {
+    auto maxy = s.y;
+    while (s.y >= boty) {
+        if (s.x >= leftx && s.x <= rightx && s.y >= boty && s.y <= topy)
+            return {true, maxy};
+        s.update();
+        maxy = max(maxy, s.y);
+    }
+    return {false, -1};
 }
+
+pair<long, long> findXrange(long leftx, long rightx, long boty, long topy) {
+    long dx = 0;
+    while (dx * dx + dx < 2 * leftx)
+        ++dx;
+    return {dx, rightx};
+}
+
+void doit(long leftx, long rightx, long boty, long topy) {
+    long maxy = boty;
+    uint64_t star2 = 0;
+    auto[minx, maxx] = findXrange(leftx, rightx, boty, topy);
+    for (long x = minx; x <= maxx; ++x) {
+        for (long y = boty; y <= 1000; ++y) {
+            if (auto[yes, newMaxy] = hits(Shot{0, 0, x, y}, leftx, rightx, boty, topy); yes) {
+                maxy = max(maxy, newMaxy);
+                ++star2;
+            }
+        }
+    }
+    cout << "Day 17 star 1 = " << maxy << "\n";
+    cout << "Day 17 star 2 = " << star2 << "\n";
+}
+
+//target area: x=56..76, y=-162..-134
+void day17() {
+    auto star1 = 0;
+    auto star2 = 0;
+
+//    hits({0, 0, 7, 2}, 20, 30, -10, -5);
+//   doit(20, 30, -10, -5);
+    doit(56, 76, -162, -134);
+}
+// 13041 yes
+// star 2 73896 too high
