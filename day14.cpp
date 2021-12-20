@@ -15,6 +15,7 @@
 #include <tuple>
 #include <utility>
 #include <vector>
+
 using std::abs;
 using std::ceil;
 using std::cout;
@@ -38,42 +39,71 @@ using std::swap;
 using std::vector;
 
 void day14() {
-    auto star1 = 0;
-    auto star2 = 0;
+    uint64_t star1 = 0;
+    uint64_t star2 = 0;
     ifstream ifile("../day14.txt");
     string line;
     string current;
-    getline(ifile,current);
-    getline(ifile,line);
-    map<pair<char,char>,char> rules;
+    getline(ifile, current);
+    getline(ifile, line);
+    using cp = pair<char, char>;
+    map<cp, vector<cp>> rules;
+    map<pair<char,char>,char> oldRules;
+
     while (getline(ifile, line)) {
         string s;
-        char p1,p2,c;
+        char p1, p2, c;
         istringstream iline(line);
         iline >> p1 >> p2 >> s >> c;
-        rules[{p1,p2}]=c;
-//        cout << p1 << p2 << c << endl;
-    }
-    for(int gen=0;gen<40;++gen) {
-        string next;
-        for(int i=0;i<current.size()-1;++i) {
-            next.push_back(current[i]);
-            if(rules.contains({current[i],current[i+1]}))
-                next.push_back(rules[{current[i],current[i+1]}]);
-        }
-        next.push_back(current.back());
-        current = next;
-        cout << gen << " " << next.size() << endl;
+        oldRules[{p1,p2}]=c;
+        rules[{p1, p2}].push_back({p1, c});
+        rules[{p1, p2}].push_back({c, p2});
     }
 
-    map<char,u_int64_t > frequencies;
-    for(auto c:current)
-        ++frequencies[c];
-    vector<pair<uint64_t ,char>> counts;
-    for(auto [c,f] : frequencies)
-        counts.push_back({f,c});
-    sort(counts.begin(),counts.end());
-    star1 = counts.back().first-counts.front().first;
+    map<cp,uint64_t> frequencies;
+    for (uint64_t i = 0; i < current.size() - 1; ++i) {
+        ++frequencies[{current[i],current[i+1]}];
+    }
+    for (uint64_t gen = 0; gen < 40; ++gen) {
+//        cout << gen << " " << current.size() << " " << current << endl;
+
+//        for(auto [p,count]:frequencies) {
+//            cout << p.first << p.second << ":" << count << " ";
+//        }
+//        cout << endl;
+
+//        string next;
+//        for(uint64_t i=0;i<current.size()-1;++i) {
+//            next.push_back(current[i]);
+//            if(oldRules.contains({current[i],current[i+1]}))
+//                next.push_back(oldRules[{current[i],current[i+1]}]);
+//        }
+//        next.push_back(current.back());
+//        current = next;
+
+        map<cp,uint64_t> nextFrequencies;
+        for(auto [p,count]:frequencies)
+            for(auto newP:rules[p])
+                nextFrequencies[newP] += count;
+
+        frequencies = nextFrequencies;
+
+    }
+
+    map<char, u_int64_t> joe;
+    for (auto [cp,count]: frequencies) {
+        joe[cp.first] += count;
+        joe[cp.second] += count;
+    }
+    ++joe[current.front()];
+    ++joe[current.back()];
+    vector<pair<uint64_t, char>> counts;
+    for (auto[c, f]: joe)
+        counts.push_back({f, c});
+    sort(counts.begin(), counts.end());
+    star1 = counts.back().first - counts.front().first;
+    star1 /= 2;
     cout << "Day 14 star 1 = " << star1 << "\n";
     cout << "Day 14 star 2 = " << star2 << "\n";
 }
+// not 9223372033857011098 is too high
