@@ -15,6 +15,7 @@
 #include <tuple>
 #include <utility>
 #include <vector>
+
 using std::abs;
 using std::ceil;
 using std::cout;
@@ -38,21 +39,21 @@ using std::swap;
 using std::vector;
 
 void daynnn() {
-   auto star1 = 0;
-   auto star2 = 0;
-   ifstream ifile("../daynnn.txt");
-   string line;
-   while (getline(ifile, line)) {
-      string s;
-      int i;
-      int x;
-      int y;
-      char c;
-      double d;
-      istringstream iline(line);
-      iline >> s;
-   }
+    uint64_t star1 = 0;
+    uint64_t star2 = 0;
+    ifstream ifile("../daynnn.txt");
+    string line;
+    while (getline(ifile, line)) {
+        string s;
+        int i;
+        int x;
+        int y;
+        char c;
+        double d;
+        istringstream iline(line);
+        iline >> s;
+    }
 
-   cout << "Day nnn star 1 = " << star1 << "\n";
-   cout << "Day nnn star 2 = " << star2 << "\n";
+    cout << "Day nnn star 1 = " << star1 << "\n";
+    cout << "Day nnn star 2 = " << star2 << "\n";
 }
